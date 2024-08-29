@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.ico') }}" type="image/x-icon">
+
+
+    <style>
+        /* Стиль для заголовков категорий */
+        h4.category-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: black;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+		h4.judge-title {
+		color: black;
+            font-size: 1.5em;
+            font-weight: bold;
+
+        }
+		body {
+            background-image: url("{{ url_for('static', filename='images/bg.png') }}");
+            background-size: cover; /* Изображение будет покрывать весь экран */
+            background-repeat: no-repeat; /* Запрет на повторение изображения */
+            background-attachment: fixed; /* Фон остается на месте при прокрутке */
+        }
+
+        /* Белый фон для контента с прозрачностью */
+        .content-wrapper {
+            background-color: rgba(255, 255, 255, 0.8); /* Белый цвет с прозрачностью */
+            padding: 20px;
+            border-radius: 10px;
+			
+			  /* Настройки для печати */
+        @media print {
+            body {
+                background-image: url("{{ url_for('static', filename='images/bg.png') }}") !important;
+                -webkit-print-color-adjust: exact; /* Для браузера Chrome */
+                print-color-adjust: exact; /* Для других браузеров */
+            }
+
+            .content-wrapper {
+                background-color: white !important; /* Убираем прозрачность для печати */
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="white-header">
+    <div class="branding">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <img src="{{ url_for('static', filename='images/logo2mblack.png') }}" alt="2M Media">
+        <div class="tagline">Made in 🇮🇱❤️</div>
+    </div>
+</header>
+
+
+<h3>Scores</h3>
+{% for category, judges_data in scores_data.items() %}
+    <h4 class="category-title">{{ category }}</h4>
+    {% for judge, data in judges_data.items() %}
+        <h4 class="judge-title">Judge {{ judge }}</h4>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Pair / Dance</th>
+                    {% for dance in categories[category]['dances'] %}
+                        <th>{{ dance }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for pair, dances in data.items() %}
+                    <tr>
+                        <td>{{ pair }}</td>
+                        {% for dance in categories[category]['dances'] %}
+                            <td>{{ dances[dance] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endfor %}
+
+<footer class="white-footer">
+    <p>&copy; 2024 2M Media | Michael Mokrushov | 3S Software Group</p>
+</footer>
+
+</body>
+</html>
+  

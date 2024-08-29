@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Judging Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon.ico') }}" type="image/x-icon">
+
+
+    <style>
+        /* Основные стили таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            font-size: 1em;
+        }
+
+body {
+            background-image: url("{{ url_for('static', filename='images/bg.png') }}");
+            background-size: cover; /* Изображение будет покрывать весь экран */
+            background-repeat: no-repeat; /* Запрет на повторение изображения */
+            background-attachment: fixed; /* Фон остается на месте при прокрутке */
+        }
+
+        /* Белый фон для контента с прозрачностью */
+        .content-wrapper {
+            background-color: rgba(255, 255, 255, 0.8); /* Белый цвет с прозрачностью */
+            padding: 20px;
+            border-radius: 10px;
+			}
+			}
+
+        /* Стили для адаптивности на мобильных устройствах */
+        @media (max-width: 600px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                width: 100%;
+                border: 0;
+            }
+
+            th, td {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+            th:first-child, td:first-child {
+                position: sticky;
+                left: 0;
+                background-color: #f2f2f2;
+                z-index: 1;
+            }
+        }
+
+        /* Стили для подсветки дубликатов */
+        .duplicate {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Стили для сообщений об ошибках */
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+    </style>
+
+    <script>
+        // Функция для валидации формы
+        function validateForm() {
+            const table = document.querySelector("table");
+            const columns = table.querySelectorAll("thead th:not(:first-child)");
+            let isValid = true;
+            const errorMessages = [];
+
+            // Сброс подсветки всех ячеек перед валидацией
+            table.querySelectorAll("tbody tr td").forEach(td => {
+                td.classList.remove("duplicate");
+            });
+
+            columns.forEach((column, columnIndex) => {
+                const selectedValues = new Map();
+                const cells = table.querySelectorAll(`tbody tr td:nth-child(${columnIndex + 2}) select`);
+
+                cells.forEach(cell => {
+                    const value = cell.value;
+                    if (value) {
+                        if (selectedValues.has(value)) {
+                            isValid = false;
+                            errorMessages.push(`Duplicate score ${value} in column ${column.textContent}.`);
+                            // Подсветка ячеек с дубликатами
+                            const duplicateCell = selectedValues.get(value);
+                            duplicateCell.classList.add("duplicate");
+                            cell.parentElement.classList.add("duplicate");
+                        } else {
+                            selectedValues.set(value, cell.parentElement);
+                        }
+                    }
+                });
+            });
+
+            const errorContainer = document.getElementById("errorContainer");
+            errorContainer.innerHTML = "";
+
+            if (!isValid) {
+                errorMessages.forEach(message => {
+                    const errorMessage = document.createElement("p");
+                    errorMessage.textContent = message;
+                    errorMessage.classList.add("error");
+                    errorContainer.appendChild(errorMessage);
+                });
+            }
+
+            return isValid;
+        }
+    </script>
+</head>
+<body>
+<header>
+    <div class="branding">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" style="height: 30px;">
+        <img src="{{ url_for('static', filename='images/logo2m.png') }}" alt="2M Media" style="height: 30px;">
+        <div class="tagline" style="font-size: 0.9em;">Made in 🇮🇱❤️</div>
+    </div>
+</header>
+
+<h1>Judging</h1>
+
+<form method="post">
+    <label for="selected_category">Select Category:</label>
+    <select id="selected_category" name="selected_category" onchange="this.form.submit()">
+        <option value="">Select Category</option>
+        {% for category in categories %}
+            <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+        {% endfor %}
+    </select>
+</form>
+
+{% if selected_category %}
+    <form method="post">
+        <input type="hidden" name="selected_category" value="{{ selected_category }}">
+        <label for="selected_letter">Select Judge:</label>
+        <select id="selected_letter" name="selected_letter" onchange="this.form.submit()">
+            <option value="">Select Judge</option>
+            {% for judge in categories[selected_category]['judges'] %}
+                <option value="{{ judge }}" {% if selected_letter == judge %}selected{% endif %}>{{ judge }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% if selected_letter %}
+        <h2>Judging for {{ selected_letter }}</h2>
+        <form method="post" onsubmit="return validateForm()">
+            <input type="hidden" name="selected_category" value="{{ selected_category }}">
+            <input type="hidden" name="selected_letter" value="{{ selected_letter }}">
+
+            {% set max_score = categories[selected_category]['pairs']|length %} <!-- Определение максимальной оценки -->
+
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Pair / Dance</th>
+                        {% for dance in categories[selected_category]['dances'] %}
+                            <th>{{ dance }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pair in categories[selected_category]['pairs'] %}
+                        <tr>
+                            <td>{{ pair }}</td>
+                            {% for dance in categories[selected_category]['dances'] %}
+                                <td>
+                                    <select name="score_{{ selected_category }}_{{ pair }}_{{ dance }}">
+                                        <option value="">--</option>
+                                        {% for i in range(1, max_score + 1) %}
+                                            <option value="{{ i }}" {% if selected_category in scores and selected_letter in scores[selected_category] and pair in scores[selected_category][selected_letter] and dance in scores[selected_category][selected_letter][pair] and scores[selected_category][selected_letter][pair][dance] == i %}selected{% endif %}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div id="errorContainer"></div> <!-- Контейнер для отображения сообщений об ошибках -->
+
+            <input type="submit" name="save_scores" value="Save Scores">
+        </form>
+    {% endif %}
+{% endif %}
+
+<footer>
+    <p>&copy; 2024 2M Media | Michael Mokrushov | 3S Software Group</p>
+</footer>
+
+</body>
+</html>
+  

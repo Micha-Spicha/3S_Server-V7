@@ -1,0 +1,158 @@
+/* styles/style.css */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('{{ url_for('static', filename='images/bg.png') }}') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    line-height: 1.4; /* Уменьшено расстояние между строками */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 18px; /* Базовый размер шрифта */
+}
+
+.white-header {
+    background-color: #fff; /* Белый фон */
+    color: #333; /* Темный текст */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2em;
+    border-bottom: 1px solid #ddd; /* Добавление нижней границы для разделения */
+}
+
+.white-header img {
+    height: 40px; /* Уменьшенный размер логотипов */
+}
+
+.white-header .branding img {
+    margin-right: 10px;
+}
+
+.white-header .tagline {
+    display: flex;
+    align-items: center;
+    font-size: 0.7em; /* Еще меньший размер таглайна */
+}
+
+
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2em;
+}
+
+header img {
+    height: 40px; /* Уменьшенный размер логотипов */
+}
+
+header .branding {
+    display: flex;
+    align-items: center;
+}
+
+header .branding img {
+    margin-right: 10px;
+}
+
+header .tagline {
+    display: flex;
+    align-items: center;
+    font-size: 1.4em;
+}
+
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-size: 1em;
+    line-height: 1.2; /* Уменьшено расстояние между строками */
+    margin-top: auto;
+}
+
+.white-footer {
+    background-color: #fff; /* Белый фон для футера */
+    color: #333; /* Темный текст */
+    text-align: center;
+    padding: 10px;
+    font-size: 0.9em;
+    border-top: 1px solid #ddd; /* Добавление верхней границы для разделения */
+}
+
+
+nav a {
+    color: #333;
+    text-decoration: none;
+    margin: 0 20px;
+    font-size: 1.5em;
+    line-height: 1.2; /* Уменьшено расстояние между строками */
+}
+
+h1, h2, h3 {
+    text-align: center;
+    font-size: 2.5em;
+    line-height: 1.2; /* Уменьшено расстояние между строками */
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2em;
+    line-height: 1.2; /* Уменьшено расстояние между строками в таблице */
+}
+
+input[type="text"], input[type="number"], select {
+    font-size: 1.2em;
+    line-height: 1.2; /* Уменьшено расстояние между строками в полях ввода */
+}
+
+button {
+    font-size: 1.2em;
+    line-height: 1.2; /* Уменьшено расстояние между строками */
+}
+.results-table {
+    width: 80%; /* Устанавливаем ширину таблицы на 80% от ширины контейнера */
+    margin: 20px auto; /* Центрируем таблицу на странице */
+    border-collapse: collapse;
+}
+
+.results-table th, .results-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.results-table th {
+    background-color: #f2f2f2; /* Светло-серый фон для заголовков */
+}
+
+@media (max-width: 768px) {
+    .results-table {
+        width: 100%; /* На мобильных устройствах таблица будет занимать всю ширину */
+        font-size: 0.9em; /* Уменьшение размера текста на мобильных устройствах */
+    }
+}
+
+
+@media (max-width: 600px) {
+    nav a {
+        margin: 15px 0;
+        line-height: 1.2; /* Уменьшено расстояние между строками для мобильных устройств */
+    }
+
+    table, th, td {
+        font-size: 1em;
+        line-height: 1.2; /* Уменьшено расстояние между строками для мобильных устройств */
+    }
+}
+  
