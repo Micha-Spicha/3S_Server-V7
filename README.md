@@ -15,8 +15,8 @@ or
 your IPv4 (for connetion from all devices)
 
 # Server ports:
-# :5000 (MS Calc)
-# :55807 (Score collection)
+:5000 (MS Calc)
+:55807 (Score collection)
 
 Links examples:
 http://127.0.0.1:5000
