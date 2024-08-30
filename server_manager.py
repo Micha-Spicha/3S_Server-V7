@@ -1,5 +1,9 @@
 import os
 import sys
+import subprocess
+import tkinter as tk
+from tkinter import scrolledtext
+from PIL import Image, ImageTk
 
 # Function to get the path to the resources directory
 def resource_path(relative_path):
@@ -59,3 +63,64 @@ class ServerManagerApp:
         # Set logo in header
         self.logo_label = tk.Label(root, image=self.logo_image)
         self.logo_label.grid(row=0, column=2, padx=10, pady=10)
+
+    def start_server1(self):
+        """ Start Scoring Server """
+        if self.server_processes[0] is None:
+            try:
+                self.server_processes[0] = subprocess.Popen(
+                    ["python", "app.py"], cwd=os.path.abspath("корневая папка"),
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                )
+                self.start_button1.config(state=tk.DISABLED)
+                self.stop_button1.config(state=tk.NORMAL)
+                self.update_output(self.info_text1, self.server_processes[0])
+            except FileNotFoundError:
+                print("Error: Scoring server script not found.")
+            except NotADirectoryError:
+                print("Error: Directory for Scoring server is invalid.")
+
+    def stop_server1(self):
+        """ Stop Scoring Server """
+        if self.server_processes[0] is not None:
+            self.server_processes[0].terminate()
+            self.server_processes[0] = None
+            self.start_button1.config(state=tk.NORMAL)
+            self.stop_button1.config(state=tk.DISABLED)
+
+    def start_server2(self):
+        """ Start MS Calc Server """
+        if self.server_processes[1] is None:
+            try:
+                self.server_processes[1] = subprocess.Popen(
+                    ["python", "app.py"], cwd=os.path.abspath("ms-calc"),
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE
+                )
+                self.start_button2.config(state=tk.DISABLED)
+                self.stop_button2.config(state=tk.NORMAL)
+                self.update_output(self.info_text2, self.server_processes[1])
+            except FileNotFoundError:
+                print("Error: MS Calc server script not found.")
+            except NotADirectoryError:
+                print("Error: Directory for MS Calc server is invalid.")
+
+    def stop_server2(self):
+        """ Stop MS Calc Server """
+        if self.server_processes[1] is not None:
+            self.server_processes[1].terminate()
+            self.server_processes[1] = None
+            self.start_button2.config(state=tk.NORMAL)
+            self.stop_button2.config(state=tk.DISABLED)
+
+    def update_output(self, text_widget, process):
+        """ Update the output of the server in the text widget """
+        def read_output():
+            for line in iter(process.stdout.readline, b''):
+                text_widget.insert(tk.END, line.decode())
+                text_widget.yview(tk.END)
+        self.root.after(100, read_output)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ServerManagerApp(root)
+    root.mainloop()
