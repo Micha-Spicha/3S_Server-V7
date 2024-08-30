@@ -72,9 +72,6 @@ def judging():
 def results():
     return render_template('results.html', scores_data=scores_data, categories=categories)
     
-@app.route('/mscalc')
-def mscalc():
-    return render_template('mass-sport.html', scores_data=scores_data, categories=categories)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=55807, debug=True)

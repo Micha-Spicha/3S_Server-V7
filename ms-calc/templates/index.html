@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Calc System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+<header class="white-header">
+    <div class="branding">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <img src="{{ url_for('static', filename='images/logo2mblack.png') }}" alt="2M Media">
+    </div>
+    <div class="tagline">Made in 🇮🇱❤️</div>
+    <img src="{{ url_for('static', filename='images/msicon.png') }}" alt="MS Icon">
+</header>
+<nav>
+    <a href="/">Home</a>
+    <a href="/calc">Calculator</a>
+    <a href="/admin">Admin</a>
+</nav>
+<h1>Welcome to MS Calc System</h1>
+</body>
+</html>

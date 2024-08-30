@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+<header class="white-header">
+    <div class="branding">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <img src="{{ url_for('static', filename='images/logo2m.png') }}" alt="2M Media">
+    </div>
+    <div class="tagline">Made in 🇮🇱❤️</div>
+    <img src="{{ url_for('static', filename='images/msicon.png') }}" alt="MS Icon">
+</header>
+<h1>Calculator</h1>
+
+<form method="get">
+    <label for="category">Select Category:</label>
+    <select name="category" id="category" onchange="this.form.submit()">
+        <option value="">--Select--</option>
+        {% for category in categories %}
+            <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category }}</option>
+        {% endfor %}
+    </select>
+</form>
+
+{% if selected_category %}
+    <h2>{{ selected_category }}</h2>
+    <form method="post">
+        {% for dance in details['dances'] %}
+            <h3>{{ dance }}</h3>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Pair</th>
+                        {% for judge in details['judges'] %}
+                            <th>{{ judge }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pair in details['pairs'] %}
+                        <tr>
+                            <td>{{ pair }}</td>
+                            {% for judge in details['judges'] %}
+                                <td>
+                                    <input type="number" name="{{ selected_category }}_{{ dance }}_{{ pair }}_{{ judge }}" min="1" max="3" required>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+        <button type="submit">Calculate Results</button>
+    </form>
+
+    {% if results %}
+        <h2>Results for {{ selected_category }}</h2>
+        {% for dance, pairs in results.items() %}
+            {% if dance != 'overall' %}
+                <h3>{{ dance }}</h3>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Pair</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pair, data in pairs.items() %}
+                            <tr>
+                                <td>{{ pair }}</td>
+                                <td>{{ data.score }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endfor %}
+        <h3>Overall Results</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Pair</th>
+                    <th>Overall Score</th>
+                    <th>Place</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pair, data in results['overall'].items() %}
+                    <tr>
+                        <td>{{ pair }}</td>
+                        <td>{{ data.score }}</td>
+                        <td>{{ data.place }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endif %}
+</body>
+</html>
