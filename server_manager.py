@@ -69,7 +69,7 @@ class ServerManagerApp:
         if self.server_processes[0] is None:
             try:
                 self.server_processes[0] = subprocess.Popen(
-                    ["python", "app.py"], cwd=os.path.abspath("корневая папка"),
+                    ["python", "app.py"],
                     stdout=subprocess.PIPE, stderr=subprocess.PIPE
                 )
                 self.start_button1.config(state=tk.DISABLED)
