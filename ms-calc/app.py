@@ -4,6 +4,7 @@ app = Flask(__name__)
 
 categories = {}
 judges = []
+all_results = {}  # Хранилище для всех введенных результатов
 
 @app.route('/')
 def index():
@@ -64,7 +65,14 @@ def calc():
                 data['place'] = 3
         results['overall'] = overall_results
 
+        # Сохраняем результаты в хранилище
+        all_results[selected_category] = results
+
     return render_template('calc.html', categories=categories.keys(), selected_category=selected_category, details=categories.get(selected_category), results=results)
+
+@app.route('/all_results')
+def all_results_view():
+    return render_template('all_results.html', all_results=all_results)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -99,7 +99,12 @@ nav a {
 
 h1, h2, h3 {
     text-align: center;
-    font-size: 2.5em;
+    font-size: 2 em;
+    line-height: 1.2; /* Уменьшено расстояние между строками */
+}
+
+h4, h5, h6 {
+    text-align: center;
     line-height: 1.2; /* Уменьшено расстояние между строками */
 }
 

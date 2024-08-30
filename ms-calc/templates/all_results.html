@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+<header class="white-header">
+    <div class="branding">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+        <img src="{{ url_for('static', filename='images/logo2mblack.png') }}" alt="2M Media">
+    </div>
+    <div class="tagline">Made in 🇮🇱❤️</div>
+    <img src="{{ url_for('static', filename='images/msicon.png') }}" alt="MS Icon">
+</header>
+<h2>All Results</h2>
+
+{% for category, results in all_results.items() %}
+    <h4>{{ category }}</h4>
+    {% for dance, pairs in results.items() %}
+        {% if dance != 'overall' %}
+            <h3>{{ dance }}</h3>
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Pair</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pair, data in pairs.items() %}
+                        <tr>
+                            <td>{{ pair }}</td>
+                            <td>{{ data.score }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endfor %}
+    <h5>Overall Results</h5>
+    <table class="results-table">
+        <thead>
+            <tr>
+                <th>Pair</th>
+                <th>Overall Score</th>
+                <th>Place</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pair, data in results['overall'].items() %}
+                <tr>
+                    <td>{{ pair }}</td>
+                    <td>{{ data.score }}</td>
+                    <td>{{ data.place }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endfor %}
+</body>
+</html>
