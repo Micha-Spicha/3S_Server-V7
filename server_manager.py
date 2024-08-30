@@ -1,23 +1,29 @@
-import tkinter as tk
-from tkinter import scrolledtext
-from PIL import Image, ImageTk
-import subprocess
-import threading
 import os
-import re
+import sys
+
+# Function to get the path to the resources directory
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores paths in `_MEIPASS`
+        base_path = sys._MEIPASS
+    except AttributeError:
+        # PyCharm and other dev environments
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
 
 class ServerManagerApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Server Manager")
-        
+
         self.server_processes = [None, None]
-        
+
         # Load and resize images
-        self.bg_image = Image.open('static/images/bg.png')
+        self.bg_image = Image.open(resource_path('static/images/bg.png'))
         self.bg_image = ImageTk.PhotoImage(self.bg_image)
 
-        self.logo_image = Image.open('static/images/logo.png')
+        self.logo_image = Image.open(resource_path('static/images/logo.png'))
         self.logo_image = self.logo_image.resize((50, 50), Image.Resampling.LANCZOS)
         self.logo_image = ImageTk.PhotoImage(self.logo_image)
 
@@ -53,58 +59,3 @@ class ServerManagerApp:
         # Set logo in header
         self.logo_label = tk.Label(root, image=self.logo_image)
         self.logo_label.grid(row=0, column=2, padx=10, pady=10)
-
-    def start_server1(self):
-        if not self.server_processes[0]:
-            self.server_processes[0] = subprocess.Popen(['python', 'app.py'], cwd=os.getcwd(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            threading.Thread(target=self.read_output, args=(0,)).start()
-            self.start_button1.config(state=tk.DISABLED)
-            self.stop_button1.config(state=tk.NORMAL)
-
-    def stop_server1(self):
-        if self.server_processes[0]:
-            self.server_processes[0].terminate()
-            self.server_processes[0] = None
-            self.start_button1.config(state=tk.NORMAL)
-            self.stop_button1.config(state=tk.DISABLED)
-
-    def start_server2(self):
-        if not self.server_processes[1]:
-            self.server_processes[1] = subprocess.Popen(['python', 'app.py'], cwd='ms-calc', stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            threading.Thread(target=self.read_output, args=(1,)).start()
-            self.start_button2.config(state=tk.DISABLED)
-            self.stop_button2.config(state=tk.NORMAL)
-
-    def stop_server2(self):
-        if self.server_processes[1]:
-            self.server_processes[1].terminate()
-            self.server_processes[1] = None
-            self.start_button2.config(state=tk.NORMAL)
-            self.stop_button2.config(state=tk.DISABLED)
-
-    def read_output(self, server_index):
-        process = self.server_processes[server_index]
-        output_stream = process.stdout
-        error_stream = process.stderr
-        while True:
-            output = output_stream.readline()
-            error = error_stream.readline()
-            if output:
-                self.display_output(server_index, output)
-            if error:
-                self.display_output(server_index, error)
-            if process.poll() is not None and not (output or error):
-                break
-
-    def display_output(self, server_index, message):
-        if server_index == 0:
-            self.info_text1.insert(tk.END, message)
-            self.info_text1.yview(tk.END)
-        else:
-            self.info_text2.insert(tk.END, message)
-            self.info_text2.yview(tk.END)
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = ServerManagerApp(root)
-    root.mainloop()
