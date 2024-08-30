@@ -111,6 +111,14 @@ th, td {
     line-height: 1.2; /* Уменьшено расстояние между строками в таблице */
 }
 
+.image-button {
+  width: 100px;
+  height: 50px;
+  border: none;
+  background-image: url('msicon.png');
+  background-size: cover;
+}
+
 input[type="text"], input[type="number"], select {
     font-size: 1.2em;
     line-height: 1.2; /* Уменьшено расстояние между строками в полях ввода */
@@ -155,4 +163,11 @@ button {
         line-height: 1.2; /* Уменьшено расстояние между строками для мобильных устройств */
     }
 }
-  
+
+.image-button {
+  width: 100px;
+  height: 50px;
+  border: none;
+  background-image: url('static/images/msicon.png');
+  background-size: cover;
+}

@@ -5,6 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MS Calc System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/bg.png') }}");
+            background-size: cover; /* Изображение будет покрывать весь экран */
+            background-repeat: no-repeat; /* Запрет на повторение изображения */
+            background-attachment: fixed; /* Фон остается на месте при прокрутке */
+        }
+
+        .white-header {
+            background-color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .branding img {
+            width: 50px; /* Ширина логотипов */
+            height: auto; /* Автоматическая высота для сохранения пропорций */
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .icon-button {
+            display: inline-block;
+            width: 80px; /* Ширина кнопки */
+            height: 80px; /* Высота кнопки */
+            background: url('{{ url_for('static', filename='images/logo.png') }}') no-repeat center center;
+            background-size: contain; /* Изображение будет масштабироваться, чтобы поместиться в кнопку */
+            border: none;
+            cursor: pointer;
+            text-indent: -9999px; /* Скрыть текст */
+            margin: 20px 0; /* Отступы вокруг кнопки */
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #007bff;
+            margin: 0 15px;
+            font-size: 1.1em;
+        }
+    </style>
 </head>
 <body>
 <header class="white-header">
@@ -13,12 +56,13 @@
         <img src="{{ url_for('static', filename='images/logo2mblack.png') }}" alt="2M Media">
     </div>
     <div class="tagline">Made in 🇮🇱❤️</div>
-    <img src="{{ url_for('static', filename='images/msicon.png') }}" alt="MS Icon">
+    <a href="/" class="icon-button" title="Go to Scoring Server"></a> <!-- Кнопка для перехода на первый сервер -->
 </header>
 <nav>
     <a href="/">Home</a>
     <a href="/calc">Calculator</a>
     <a href="/admin">Admin</a>
+	 
 </nav>
 <h1>Welcome to MS Calc System</h1>
 </body>

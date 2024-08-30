@@ -9,6 +9,10 @@ pair_list = {}
 judge_list = {}
 scores_data = {}
 
+@app.route('/goto_ms_calc')
+def goto_ms_calc():
+    return redirect('http://192.168.1.44:5000')  # URL MS Calc Server
+
 @app.route('/')
 def index():
     return render_template('index.html')

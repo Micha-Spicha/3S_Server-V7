@@ -9,6 +9,10 @@ judges = []
 def index():
     return render_template('index.html')
 
+@app.route('/scoring')
+def goto_ms_calc():
+    return redirect('http://192.168.1.44:55807')  # URL MS Calc Server
+
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     global categories, judges
