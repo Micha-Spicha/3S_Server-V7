@@ -24,7 +24,7 @@ class ServerManagerApp:
         self.server_processes = [None, None]
 
         # Load and resize images
-        self.bg_image = Image.open(resource_path('static/images/bg.png'))
+        self.bg_image = Image.open(resource_path('splash.png'))
         self.bg_image = ImageTk.PhotoImage(self.bg_image)
 
         self.logo_image = Image.open(resource_path('static/images/logo.png'))
